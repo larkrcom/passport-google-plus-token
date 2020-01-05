@@ -36,7 +36,7 @@ export default class GoogleTokenStrategy extends OAuth2Strategy {
 
     super(options, verify);
 
-    this.name = 'google-plus-token';
+    this.name = 'google-token';
     this._accessTokenField = options.accessTokenField || 'access_token';
     this._refreshTokenField = options.refreshTokenField || 'refresh_token';
     this._profileURL = options.profileURL || 'https://www.googleapis.com/oauth2/v3/userinfo';
