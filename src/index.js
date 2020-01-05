@@ -86,7 +86,11 @@ export default class GoogleTokenStrategy extends OAuth2Strategy {
       if (error) {
         try {
           let errorJSON = JSON.parse(error.data);
-          return done(new InternalOAuthError(errorJSON.error.message, errorJSON.error.code));
+          if (errorJSON && errorJSON.error && errorJSON.error.message) {
+            return done(new InternalOAuthError(errorJSON.error.message, errorJSON.error.code));
+          } else if (errorJSON && errorJSON.error && errorJSON.error_description) {
+            return done(new InternalOAuthError(errorJSON.error_description, errorJSON.error));
+          }
         } catch (_) {
           return done(new InternalOAuthError('Failed to fetch user profile', error));
         }
@@ -100,6 +104,8 @@ export default class GoogleTokenStrategy extends OAuth2Strategy {
 
       try {
         const profile = parse(json)
+
+        profile.provider = 'google';
         profile._raw = body
         profile._json = json
 
